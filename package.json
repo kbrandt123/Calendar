@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -13,6 +15,19 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "react-scripts": "latest"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

@@ -22,7 +22,7 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  gap: 10px; /* Increase the gap for more spacing between days */
 }
 
 .day-name {
@@ -46,4 +46,22 @@
 .current-day {
   background-color: #0078d4;
   color: #fff;
+}
+
+.faint-day {
+  color: #ccc; /* Make the days for the next month appear faint */
+}
+
+.simulate-next-day-button {
+  background-color: #0078d4;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.simulate-next-day-button:hover {
+  background-color: #005a9e;
 }

@@ -1,19 +1,47 @@
-import React from 'react';
-import './Calendar.css';
+import React from "react";
+import "./Calendar.css";
+import {
+  format,
+  startOfMonth,
+  addDays,
+  subDays,
+  eachDayOfInterval,
+  isSameMonth,
+  addMonths,
+  isLastDayOfMonth,
+} from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 
 function Calendar({ currentDate, onSimulateNextDay }) {
-  const currentDay = currentDate.getDate();
-  const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
-  const daysInMonth = new Date(
-    currentDate.getUTCFullYear(),
-    currentDate.getUTCMonth() + 1,
-    0
-  ).getUTCDate();
+  const currentMonth = format(currentDate, "MMMM yyyy");
+  const firstDayOfMonth = startOfMonth(currentDate);
+  const zonedFirstDayOfMonth = utcToZonedTime(
+    firstDayOfMonth,
+    "America/Los_Angeles"
+  );
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const startOfCalendar = subDays(
+    zonedFirstDayOfMonth,
+    zonedFirstDayOfMonth.getDay()
+  );
+  const endOfCalendar = addDays(startOfCalendar, 41);
+  const daysInMonth = eachDayOfInterval({
+    start: startOfCalendar,
+    end: endOfCalendar,
+  });
+
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const simulateNextDay = () => {
-    onSimulateNextDay();
+    const nextDay = addDays(currentDate, 1);
+
+    if (isLastDayOfMonth(utcToZonedTime(currentDate, "America/Los_Angeles"))) {
+      const nextMonth = addMonths(currentDate, 1);
+      onSimulateNextDay(startOfMonth(nextMonth));
+    } else {
+      onSimulateNextDay(utcToZonedTime(nextDay, "America/Los_Angeles"));
+    }
+    console.log(currentDate);
   };
 
   return (
@@ -30,12 +58,17 @@ function Calendar({ currentDate, onSimulateNextDay }) {
             {day}
           </div>
         ))}
-        {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => (
+        {daysInMonth.map((date) => (
           <div
-            key={day}
-            className={`day ${day === currentDay ? 'current-day' : ''}`}
+            key={date}
+            className={`day ${
+              format(currentDate, "yyyy-MM-dd") ===
+              format(utcToZonedTime(date, "America/Los_Angeles"), "yyyy-MM-dd")
+                ? "current-day"
+                : ""
+            } ${date.getMonth() !== currentDate.getMonth() ? "faint-day" : ""}`}
           >
-            {day}
+            {format(utcToZonedTime(date, "America/Los_Angeles"), "d")}
           </div>
         ))}
       </div>
